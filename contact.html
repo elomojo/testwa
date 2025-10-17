@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Contact — TestWA</title>
+  <link rel="stylesheet" href="css/site.css">
+  <link rel="stylesheet" href="css/about.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="logo" href="index.html">TestWA</a>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="contact.html" aria-current="page">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <script>
+      // Analytics dataLayer page view for Contact page
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: 'page_view',
+        page: {
+          path: '/contact.html',
+          title: document.title || 'Contact',
+          type: 'contact'
+        }
+      });
+    </script>
+    <section class="hero">
+      <div class="container">
+        <h1>Contact us</h1>
+        <p class="lead">Send us a message and we'll get back to you shortly.</p>
+      </div>
+    </section>
+
+    <section class="container">
+      <form id="contactForm" class="card" autocomplete="on">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required placeholder="you@example.com">
+
+        <label for="phone">Phone</label>
+        <input id="phone" name="phone" type="tel" inputmode="tel" placeholder="+33 6 12 34 56 78">
+
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="6" required placeholder="How can we help?"></textarea>
+
+        <div style="display:flex;gap:.5rem;align-items:center;margin-top:1rem">
+          <button type="submit" class="button">Send message</button>
+          <div id="status" style="color:var(--muted)"></div>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <small>&copy; 2025 TestWA. All rights reserved.</small>
+    </div>
+  </footer>
+
+  <script>
+  (function(){
+    const form = document.getElementById('contactForm');
+    const status = document.getElementById('status');
+    const targetEmail = 'elodiethomas1996@gmail.com';
+
+    // Try to submit via FormSubmit (no server) — replace the action with your preferred service if needed
+    async function submitToFormSubmit(data) {
+      // FormSubmit endpoint: https://formsubmit.co/
+      const endpoint = 'https://formsubmit.co/ajax/' + encodeURIComponent(targetEmail);
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Accept': 'application/json' },
+          body: data
+        });
+        return res.ok;
+      } catch (err) {
+        return false;
+      }
+    }
+
+    function mailtoFallback(email, fields) {
+      const bodyLines = [];
+      if (fields.email) bodyLines.push('From: ' + fields.email);
+      if (fields.phone) bodyLines.push('Phone: ' + fields.phone);
+      bodyLines.push('\n' + fields.message);
+      const subject = encodeURIComponent('Contact form message from TestWA');
+      const body = encodeURIComponent(bodyLines.join('\n'));
+      window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      status.textContent = 'Sending...';
+
+      const formData = new FormData(form);
+
+      // Minimal validation: ensure required fields
+      const emailVal = formData.get('email');
+      const messageVal = formData.get('message');
+      if (!emailVal || !messageVal) {
+        status.textContent = 'Please fill required fields.';
+        return;
+      }
+
+      const ok = await submitToFormSubmit(formData);
+      if (ok) {
+        status.textContent = 'Message sent — thank you!';
+        form.reset();
+        setTimeout(()=> status.textContent = '', 4000);
+        return;
+      }
+
+      // Fallback to mailto if FormSubmit didn't work
+      status.textContent = 'Could not send via web service, opening your mail client...';
+      const fields = { email: emailVal, phone: formData.get('phone') || '', message: messageVal };
+      setTimeout(()=> mailtoFallback(targetEmail, fields), 800);
+    });
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title>About Us — TestWA</title>
+	<link rel="stylesheet" href="css/site.css">
+	<link rel="stylesheet" href="css/about.css">
+</head>
+<body>
+	<header class="site-header">
+		<div class="container">
+			<a class="logo" href="index.html">TestWA</a>
+			<nav class="nav">
+				<a href="index.html">Home</a>
+				<a href="about.html" aria-current="page">About</a>
+			</nav>
+		</div>
+	</header>
+
+	<main>
+		<script>
+			// Analytics dataLayer page view for About page
+			window.dataLayer = window.dataLayer || [];
+			window.dataLayer.push({
+				event: 'page_view',
+				page: {
+					path: '/about.html',
+					title: document.title || 'About Us',
+					type: 'about'
+				}
+			});
+		</script>
+		<section class="hero">
+			<div class="container">
+				<h1>About Us</h1>
+				<p class="lead">We build simple, accessible websites and tools that help people get things done.</p>
+			</div>
+		</section>
+
+		<section class="mission container">
+			<h2>Our Mission</h2>
+			<p>To make the web friendlier and more useful by focusing on clarity, accessibility, and performance.</p>
+		</section>
+
+		<section class="team container">
+			<h2>Meet the Team</h2>
+			<div class="cards">
+				<article class="card">
+					<div class="avatar">ET</div>
+					<h3>Elodie Thomas</h3>
+					<p>Founder &amp; Designer — passionate about UX and clean interfaces.</p>
+				</article>
+				<article class="card">
+					<div class="avatar">MJ</div>
+					<h3>Michael Johnston</h3>
+					<p>Lead Developer — builds reliable front-end and tooling.</p>
+				</article>
+				<article class="card">
+					<div class="avatar">AR</div>
+					<h3>Ana Rivera</h3>
+					<p>Community Manager — keeps our users happy and heard.</p>
+				</article>
+			</div>
+		</section>
+
+		<section class="contact container">
+			<h2>Get in touch</h2>
+			<p>If you'd like to work with us or ask a question, email <a href="mailto:hello@testwa.local">hello@testwa.local</a>.</p>
+			<p><a class="button" href="index.html">Back to Home</a></p>
+		</section>
+	</main>
+
+	<footer class="site-footer">
+		<div class="container">
+			<small>&copy; 2025 TestWA. All rights reserved.</small>
+		</div>
+	</footer>
+</body>
+</html>
