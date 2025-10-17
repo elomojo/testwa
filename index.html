@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modern Analytics Demo Shop</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Roboto', sans-serif; margin: 0; background-color: #f5f5f5; }
+  header { background-color: #4CAF50; color: white; padding: 15px 20px; }
+  nav a { color: white; margin-right: 15px; text-decoration: none; font-weight: bold; }
+  .container { padding: 20px; }
+  .product { background-color: white; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 15px; margin-bottom: 20px; display: flex; align-items: center; }
+  .product img { width: 100px; height: 100px; object-fit: cover; border-radius: 10px; margin-right: 15px; }
+  .cart { background-color: white; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 15px; margin-top: 20px; }
+  button { padding: 8px 15px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; }
+  button:hover { background-color: #45a049; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Modern Analytics Demo Shop</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="about.html">About Us</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+<div class="container">
+  <div id="products"></div>
+  <div class="cart">
+    <h2>Cart</h2>
+    <ul id="cartItems"></ul>
+    <button id="checkoutBtn">Begin Checkout</button>
+  </div>
+</div>
+<script>
+window.dataLayer = window.dataLayer || [];
+
+const products = [
+  { id: 'p1', name: 'Demo Product 1', price: 10.0, img: 'https://via.placeholder.com/100?text=Prod+1' },
+  { id: 'p2', name: 'Demo Product 2', price: 15.0, img: 'https://via.placeholder.com/100?text=Prod+2' },
+  { id: 'p3', name: 'Demo Product 3', price: 20.0, img: 'https://via.placeholder.com/100?text=Prod+3' }
+];
+
+const cart = [];
+
+function renderProducts() {
+  const container = document.getElementById('products');
+  container.innerHTML = '';
+  products.forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'product';
+    div.innerHTML = `<img src='${p.img}' alt='${p.name}'><div><h3>${p.name}</h3><p>Price: $${p.price}</p><button onclick="addToCart('${p.id}')">Add to Cart</button></div>`;
+    container.appendChild(div);
+
+    dataLayer.push({ event: 'viewItem', ecommerce: { items: [{ id: p.id, name: p.name, price: p.price }] } });
+  });
+}
+
+function addToCart(productId) {
+  const product = products.find(p => p.id === productId);
+  if (!product) return;
+  cart.push(product);
+  renderCart();
+
+  dataLayer.push({ event: 'addToCart', ecommerce: { items: [{ id: product.id, name: product.name, price: product.price, quantity: 1 }] } });
+}
+
+function renderCart() {
+  const ul = document.getElementById('cartItems');
+  ul.innerHTML = '';
+  cart.forEach(item => {
+    const li = document.createElement('li');
+    li.textContent = `${item.name} - $${item.price}`;
+    ul.appendChild(li);
+  });
+}
+
+document.getElementById('checkoutBtn').addEventListener('click', () => {
+  if (cart.length === 0) { alert('Cart is empty!'); return; }
+
+  dataLayer.push({ event: 'beginCheckout', ecommerce: { items: cart.map(item => ({ id: item.id, name: item.name, price: item.price, quantity: 1 })) } });
+
+  alert('Checkout simulated! Purchase complete.');
+
+  dataLayer.push({ event: 'purchase', ecommerce: { items: cart.map(item => ({ id: item.id, name: item.name, price: item.price, quantity: 1 })), revenue: cart.reduce((sum, i) => sum + i.price, 0) } });
+
+  cart.length = 0;
+  renderCart();
+});
+
+renderProducts();
+</script>
+</body>
+</html>
