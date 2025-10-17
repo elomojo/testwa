@@ -15,14 +15,12 @@
     <script>
       // Analytics dataLayer page view for Contact page
       window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({
-        event: 'page_view',
-        page: {
-          path: '/contact.html',
-          title: document.title || 'Contact',
-          type: 'contact'
-        }
-      });
+        window.dataLayer.push({
+                event: 'page.display',
+                page_category: "Contact", 
+                page_subject: "Demo Shop", 
+                page_type : "contact"
+            });
     </script>
     <section class="hero">
       <div class="container">

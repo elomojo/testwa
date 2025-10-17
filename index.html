@@ -37,13 +37,11 @@
 
   <script>
   window.dataLayer = window.dataLayer || [];
-   window.dataLayer.push({
-        event: 'page_view',
-        page: {
-          path: '/home.html',
-          title: document.title || 'Home',
-          type: 'Home'
-        }
+  window.dataLayer.push({
+        event: 'page.display',
+        page_category: "Home", 
+        page_subject: "Demo Shop", 
+        page_type : "home"
       });
 
   const products = [
@@ -70,7 +68,7 @@
       `;
       container.appendChild(div);
 
-      dataLayer.push({ event: 'viewItem', ecommerce: { items: [{ id: p.id, name: p.name, price: p.price }] } });
+      dataLayer.push({ event: 'product.display', product_data: [{ id: p.id, name: p.name, price: p.price }]  });
     });
   }
 
@@ -80,7 +78,16 @@
     cart.push(product);
     renderCart();
 
-    dataLayer.push({ event: 'addToCart', ecommerce: { items: [{ id: product.id, name: product.name, price: product.price, quantity: 1 }] } });
+    dataLayer.push({ 
+      event: 'product.addToCart', 
+      product_data: [
+        { product_id: product.id, 
+          product_name: product.name, 
+          product_price: product.price, 
+          product_quantity: 1 
+        }
+      ] 
+    });
   }
 
   function renderCart() {
@@ -96,11 +103,13 @@
   document.getElementById('checkoutBtn').addEventListener('click', () => {
     if (cart.length === 0) { alert('Cart is empty!'); return; }
 
-    dataLayer.push({ event: 'beginCheckout', ecommerce: { items: cart.map(item => ({ id: item.id, name: item.name, price: item.price, quantity: 1 })) } });
+    dataLayer.push({ event: 'beginCheckout', ecommerce: { items: cart.map(item => ({ product_id: item.id, product_name: item.name, product_price: item.price, product_quantity: 1 })) } });
 
     alert('Checkout simulated! Purchase complete.');
 
-    dataLayer.push({ event: 'purchase', ecommerce: { items: cart.map(item => ({ id: item.id, name: item.name, price: item.price, quantity: 1 })), revenue: cart.reduce((sum, i) => sum + i.price, 0) } });
+    dataLayer.push({ 
+      event: 'product.purchase', 
+      product_data: cart.map(item => ({ product_id: item.id, product_name: item.name, product_price: item.price, product_quantity: 1 })), revenue: cart.reduce((sum, i) => sum + i.price, 0) });
 
     cart.length = 0;
     renderCart();
